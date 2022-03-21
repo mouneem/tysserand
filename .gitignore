@@ -10,3 +10,6 @@ Imagin_lungPredict/*
 new_data/*
 Imagin_lungPredict/
 new_data/
+Imagin_LungPredict/*
+*.tif*
+*fcs*
