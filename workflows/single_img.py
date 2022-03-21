@@ -4,22 +4,22 @@ import matplotlib.pyplot as plt
 import os
 from pathlib import Path
 from tysserand import tysserand as ty
-import cv2
+from PIL import Image
+Image.MAX_IMAGE_PIXELS = 1000000000 
 
 # where we save and load annotations
-data_dir = Path("./new_data")
+data_dir = Path("/home/mouneem/Projects/tysserand/tysserand/new_data/")
+
+nodes = pd.read_csv(data_dir / 'minNVA_21-003.IMMCORE.C1v1_17T003826-06-ImvessC1-4518.czi_79795_ObjData.fcs.csv', usecols=['x','y', 'class'])
+print(len(nodes))
+nodes = nodes.sample(n = round(len(nodes) / 2) )
+print(len(nodes))
 
 ## Adjust
-img = plt.imread(data_dir / "1307.png")
+img = plt.imread(data_dir / "NVA_21-003.IMMCORE.C1v1_17T003826-06-ImvessC1-4518_job79795_MarkupMid.png")
 
-
-
-# import random 
-from random import sample
-
-nodes = pd.read_csv(data_dir / '1307.csv', usecols=['x','y', 'class'])
-
-nodes = nodes.sample(n = 1000)
+from PIL import Image, ImageOps
+#img = ImageOps.grayscale(img)
 
 coords = nodes.loc[:,['x','y']].values
 
@@ -30,8 +30,15 @@ print(classes)
 dico_col = {classes[0]:class_colors[0],
             classes[1]:class_colors[1],
             classes[2]:class_colors[2],
-#            classes[3]:class_colors[3],
-      #      classes[4]:class_colors[4],
+            classes[3]:class_colors[3],
+            classes[4]:class_colors[4],
+            classes[5]:class_colors[5],
+            classes[6]:class_colors[6],
+            classes[7]:class_colors[7],
+            classes[8]:class_colors[8],
+            classes[9]:class_colors[9],
+       #     classes[10]:class_colors[10],
+          #  classes[11]:class_colors[11],
            }
 colors = []
 for cl in nodes['class']:
@@ -46,50 +53,69 @@ min_y = min(coords[:, 1])
 max_x = max(coords[:, 0])
 max_y = max(coords[:, 1])
 
-print( (max_x - min_x), (max_y - min_y)  )
-print( (max_x - min_x), (max_y - min_y)  )
 
 print(min_x, min_y)
 
+import cv2
+#img = cv2.flip(img, 0)
 
+import numpy
 
 coords2 = coords
 
+coords_x_diff = max(coords2[:, 0]) - min(coords2[:, 0])
+coords_y_diff = max(coords2[:, 1]) - min(coords2[:, 1])
 
-coords2[:, 0] = coords2[:, 0] - 5550
+img2 = img
+#img2 = cv2.resize(img, (coords_x_diff , coords_y_diff)) 
+w = img.shape[0]
+h = img.shape[1]
 
-coords2[:, 1] = coords2[:, 1] - 18470
+ratio_x = h / coords_x_diff
+ratio_y = w / coords_y_diff
 
-
-img2 = cv2.resize(img, (19287 , 17222)) 
-fig, ax = ty.showim(img2, figsize=(500, 500))
-
-
-
-
-#pairs = ty.build_delaunay(coords2)
-#distances = ty.distance_neighbors(coords2, pairs)
-#col_nodes = colors
-#ax.scatter(coords2[:,0], coords2[:,1], c=col_nodes,  zorder=10)
-#plt.show()
+ratio = 1
+ratio = 0.1
+ratio = ratio_y
 
 
-##
+coords2[:, 0] = coords2[:, 0] * ratio
+coords2[:, 1] = coords2[:, 1] * ratio
 
-#NAPARI
-"""
+coords2[:, 0] = coords2[:, 0] - min(coords2[:, 0])
+coords2[:, 1] = coords2[:, 1] - min(coords2[:, 1])
 
-import napari
-viewer = napari.Viewer()
-ty.visualize(viewer, img, colormaps='rgb')
+print(coords_x_diff , coords_y_diff)
 
- 
-annotations = ty.make_annotation_dict(
-    coords, pairs=pairs,
-    nodes_class=nodes['marker'],
-    nodes_class_color_mapper=dico_col,
-)
-ty.add_annotations(viewer, annotations)
+pairs = ty.build_delaunay(coords2)
+print(len(pairs))
 
-"""
+coords = coords2
+from libpysal.cg.voronoi  import voronoi, voronoi_frames
 
+regions, vertices = voronoi(coords)
+region_df, point_df = voronoi_frames(coords)
+
+imdir = Path(".")
+fig, ax = plt.subplots(figsize=(200,200))
+region_df.plot(ax=ax, color='blue',edgecolor='black', alpha=0.3)
+point_df.plot(ax=ax, color='red')
+plt.axis('off')
+plt.savefig(imdir.joinpath('mIF - PySAL Voronoi tessellation'), bbox_inches=('tight'))
+
+ty.showim(color.label2rgb(masks, bg_label=0, colors=label_cmap), origin='lower')
+plt.savefig(imdir.joinpath('generated-tissue-masks'), bbox_inches=('tight'))
+
+    
+#########################################################################
+# import napari
+# viewer = napari.Viewer()
+# ty.visualize(viewer, img, colormaps='rgb')
+
+# annotations = ty.make_annotation_dict(
+#     coords, pairs=pairs,
+#     nodes_class=nodes['class'],
+#     nodes_class_color_mapper=dico_col,
+# )
+# ty.add_annotations(viewer, annotations)
+# plt.show()
