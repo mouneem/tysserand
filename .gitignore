@@ -11,8 +11,9 @@ new_data/*
 Imagin_lungPredict/
 new_data/
 Imagin_LungPredict/*
-*.tif*
-*fcs*
+*.tif
+*fcs
+*csv
 crop_1p.png
 .gitignore
 output_prev.png
