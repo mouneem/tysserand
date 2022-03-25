@@ -11,10 +11,15 @@ new_data/*
 Imagin_lungPredict/
 new_data/
 Imagin_LungPredict/*
-*.tif*
-*fcs*
+*.tif
+*fcs
+*csv
 crop_1p.png
 .gitignore
 output_prev.png
 crop.png
 CORDELIER_PIERRE/*
+workflows/SingleImg-jvsc-7512fe6c-f20c-4083-8f67-4970ed7adedd.ipynb
+mosna/images/*
+mosna/resources/*
+mosna/examples/*
