@@ -20,7 +20,10 @@ output_prev.png
 crop.png
 CORDELIER_PIERRE/*
 workflows/SingleImg-jvsc-7512fe6c-f20c-4083-8f67-4970ed7adedd.ipynb
+<<<<<<< HEAD
 mosna/images/*
 mosna/resources/*
 mosna/examples/*
 CORDELIER_PIERRE/*
+=======
+>>>>>>> c7e583c0bf4b6c9d30c9d594685eaf7ac82da594
