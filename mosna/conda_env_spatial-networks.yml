@@ -1,0 +1,23 @@
+name: mosna
+channels:
+  - conda-forge
+  - fastai
+  - defaults
+dependencies:
+  - python==3.8
+  - ipykernel
+  - matplotlib
+  - pip
+  - qtconsole
+  - scipy
+  - seaborn
+  - pathlib
+  - scikit-learn
+  - scikit-image
+  - numpy
+  - hdbscan
+  - umap-learn
+  - dask
+  - spyder-kernels
+  - napari
+  - opencv-python-headless
