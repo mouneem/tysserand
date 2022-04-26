@@ -7,10 +7,13 @@
 			"path": "../PNETS-NETS"
 		},
 		{
-			"path": "../Personal/JCRD"
+			"path": "../clone/stardist"
 		},
 		{
-			"path": "../clone/stardist"
+			"path": "../CellDetectionWorkflow"
+		},
+		{
+			"path": "../AFClustering"
 		}
 	],
 	"settings": {}
